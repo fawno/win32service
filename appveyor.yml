@@ -46,9 +46,11 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build\ext
+    cd %APPVEYOR_BUILD_FOLDER%\build
 
-    rename php_win32service.dll php_win32service-7.0-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    mkdir php_win32service-7.0-vc14
+
+    rename ext\php_win32service.dll php_win32service-7.0-vc14\php_win32service-7.0-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
     cd C:\projects\php-src
 
@@ -64,15 +66,15 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build\ext
+    cd %APPVEYOR_BUILD_FOLDER%\build
 
-    rename php_win32service.dll php_win32service-7.0-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    rename ext\php_win32service.dll php_win32service-7.0-vc14\php_win32service-7.0-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
 
 artifacts:
   - path: build
     name: master
     type: zip
-  - path: 'build/ext/php_win32service*.dll'
+  - path: 'build\php_win32service-7.0-vc14'
     name: php_win32service-7.0-vc14-%DEPTS_ARCH%
     type: zip
