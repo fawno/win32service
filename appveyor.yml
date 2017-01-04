@@ -5,20 +5,8 @@ environment:
   matrix:
     - ARCH: amd64
       DEPTS_ARCH: x64
-      ZTS_STATE: enable
-      ZTS_SHORT: ts
     - ARCH: x86
       DEPTS_ARCH: x86
-      ZTS_STATE: enable
-      ZTS_SHORT: ts
-    - ARCH: amd64
-      DEPTS_ARCH: x64
-      ZTS_STATE: disable
-      ZTS_SHORT: nts
-    - ARCH: x86
-      DEPTS_ARCH: x86
-      ZTS_STATE: disable
-      ZTS_SHORT: nts
 
 
 install:
@@ -46,6 +34,9 @@ build_script:
 
     cd C:\projects\php-src
 
+    set ZTS_STATE=enable
+    set ZTS_SHORT=ts
+
     buildconf.bat
 
     configure.bat --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
@@ -54,11 +45,22 @@ build_script:
 
     nmake install
 
-    copy php.ini-development C:\projects\win32service\build\php.ini
+    cd %APPVEYOR_BUILD_FOLDER%\build\ext
 
-    mkdir C:\projects\win32service\build\modules.d
+    rename php_win32service.dll php_win32service-7.0-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
-    echo extension=php_win32service.dll > C:\projects\win32service\build\modules.d\php.ini
+    cd C:\projects\php-src
+
+    set ZTS_STATE=disable
+    set ZTS_SHORT=nts
+
+    buildconf.bat
+
+    configure.bat --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
+
+    nmake
+
+    nmake install
 
     cd %APPVEYOR_BUILD_FOLDER%\build\ext
 
@@ -70,3 +72,5 @@ artifacts:
     name: master
     type: zip
   - path: 'build/ext/php_win32service*.dll'
+    name: php_win32service-7.0-vc14-%DEPTS_ARCH%
+    type: zip
