@@ -35,6 +35,7 @@ build_script:
     cd C:\projects\php-src
 
     set ZTS_STATE=enable
+
     set ZTS_SHORT=ts
 
     buildconf.bat
@@ -52,6 +53,7 @@ build_script:
     cd C:\projects\php-src
 
     set ZTS_STATE=disable
+
     set ZTS_SHORT=nts
 
     buildconf.bat
