@@ -50,7 +50,7 @@ build_script:
 
     mkdir php_win32service-7.0-vc14
 
-    rename ext\php_win32service.dll php_win32service-7.0-vc14\php_win32service-7.0-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move ext\php_win32service.dll php_win32service-7.0-vc14\php_win32service-7.0-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
     cd C:\projects\php-src
 
@@ -68,7 +68,7 @@ build_script:
 
     cd %APPVEYOR_BUILD_FOLDER%\build
 
-    rename ext\php_win32service.dll php_win32service-7.0-vc14\php_win32service-7.0-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move ext\php_win32service.dll php_win32service-7.0-vc14\php_win32service-7.0-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
 
 artifacts:
