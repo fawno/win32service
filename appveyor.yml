@@ -52,9 +52,9 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build
+    cd %APPVEYOR_BUILD_FOLDER%
 
-    move ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
     cd C:\projects\php-src
 
@@ -70,9 +70,9 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build
+    cd %APPVEYOR_BUILD_FOLDER%
 
-    move ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
     set ARCH=x86
 
@@ -100,9 +100,9 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build
+    cd %APPVEYOR_BUILD_FOLDER%
 
-    move ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
     cd C:\projects\php-src
 
@@ -118,9 +118,9 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build
+    cd %APPVEYOR_BUILD_FOLDER%
 
-    move ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
 
 artifacts:
