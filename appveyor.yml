@@ -26,6 +26,8 @@ build_script:
 
     mkdir C:\projects\win32service\artifacts
 
+    xcopy C:\projects\win32service\*.php C:\projects\win32service\artifacts /y
+
     set ARCH=amd64
 
     set DEPTS_ARCH=x64
