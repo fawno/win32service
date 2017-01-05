@@ -6,6 +6,8 @@ environment:
     - PHP_REL: 7.0
     - PHP_REL: 7.1
 
+cache:
+ - C:\projects\win32service\artifacts
 
 install:
 - cmd: cinst wget
