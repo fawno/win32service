@@ -12,8 +12,6 @@ install:
 - cmd: mkdir C:\projects\win32service\build
 build_script:
 - cmd: >-
-    mkdir C:\projects\artifacts
-
     cd C:\projects
 
     wget http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
@@ -25,6 +23,8 @@ build_script:
     mkdir C:\projects\php-src\ext\win32service
 
     xcopy C:\projects\win32service C:\projects\php-src\ext\win32service /s /e /y
+
+    mkdir C:\projects\win32service\artifacts
 
     set ARCH=amd64
 
@@ -52,9 +52,9 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build\ext
+    cd %APPVEYOR_BUILD_FOLDER%\build
 
-    move php_win32service.dll C:\projects\artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
     cd C:\projects\php-src
 
@@ -70,9 +70,9 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build\ext
+    cd %APPVEYOR_BUILD_FOLDER%\build
 
-    move php_win32service.dll C:\projects\artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
     set ARCH=x86
 
@@ -100,9 +100,9 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build\ext
+    cd %APPVEYOR_BUILD_FOLDER%\build
 
-    move php_win32service.dll C:\projects\artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
     cd C:\projects\php-src
 
@@ -118,12 +118,12 @@ build_script:
 
     nmake install
 
-    cd %APPVEYOR_BUILD_FOLDER%\build\ext
+    cd %APPVEYOR_BUILD_FOLDER%\build
 
-    move php_win32service.dll C:\projects\artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
+    move ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-%ZTS_SHORT%-%DEPTS_ARCH%.dll
 
 
 artifacts:
-  - path: 'C:\projects\artifacts'
+  - path: 'artifacts'
     name: php_win32service-%PHP_REL%-vc14
     type: zip
