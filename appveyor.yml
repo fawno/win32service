@@ -15,7 +15,7 @@ platform:
   - x86
 
 build_script:
-  - appveyor\build.bat
+  - appveyor\build.cmd
 
 artifacts:
   - path: 'artifacts'
