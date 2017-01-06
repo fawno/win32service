@@ -1,8 +1,16 @@
 setlocal enableextensions enabledelayedexpansion
 	cd C:\projects
 
-	set
+	set ARCHITECTURES=amd64 x86
+	for %%a in (%ARCHITECTURES%) do (
+		set ARCH=%%a
+		if "!ARCH!"=="amd64" set DEPTS_ARCH=x64
+		if "!ARCH!"=="x86" set DEPTS_ARCH=x86
+		echo %PHP_REL% !ARCH! !DEPTS_ARCH!
+	)
+rem	set
 goto end
+
     wget http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
 
     7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
