@@ -10,15 +10,11 @@ install:
 - cmd: cinst wget
 - cmd: mkdir C:\projects\win32service\build
 
-platform:
-  - x64
-  - x86
-
 build_script:
   - appveyor\build.cmd
 
 artifacts:
-  - path: 'artifacts'
+  - path: artifacts
     name: php_win32service-%PHP_REL%-vc14
     type: zip
 
