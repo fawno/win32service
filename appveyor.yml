@@ -48,7 +48,7 @@ build_script:
 
     buildconf.bat
 
-    configure.bat --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
+    configure.bat --disable-all --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
 
     nmake
 
@@ -66,7 +66,7 @@ build_script:
 
     buildconf.bat
 
-    configure.bat --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
+    configure.bat --disable-all --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
 
     nmake
 
@@ -96,7 +96,7 @@ build_script:
 
     buildconf.bat
 
-    configure.bat --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
+    configure.bat --disable-all --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
 
     nmake
 
@@ -114,7 +114,7 @@ build_script:
 
     buildconf.bat
 
-    configure.bat --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
+    configure.bat --disable-all --with-mp=auto --enable-cli --%ZTS_STATE%-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
 
     nmake
 
