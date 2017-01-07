@@ -37,7 +37,9 @@ setlocal enableextensions enabledelayedexpansion
 			nmake install
 
 			cd %APPVEYOR_BUILD_FOLDER%
-			move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
+			copy build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
+			cd build
+			php -i > ..\artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.txt
 		)
 	)
 

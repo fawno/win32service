@@ -9,7 +9,7 @@ environment:
 #      ZTS_STATES: enable disable
     - PHP_REL: 7.1
       ARCHITECTURES: amd64
-      ZTS_STATES: enable
+      ZTS_STATES: enable disable
 
 install:
 - cmd: cinst wget
