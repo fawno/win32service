@@ -41,4 +41,9 @@ setlocal enableextensions enabledelayedexpansion
 			move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
 		)
 	)
+
+	if "%APPVEYOR_REPO_TAG_NAME%"=="" (
+		set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT:~0,8%
+		appveyor SetVariable -Name APPVEYOR_REPO_TAG_NAME -Value %APPVEYOR_REPO_COMMIT:~0,8%
+	)
 endlocal

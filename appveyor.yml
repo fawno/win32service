@@ -5,11 +5,11 @@ image: Visual Studio 2015
 environment:
   matrix:
     - PHP_REL: 7.0
-      ARCHITECTURES: amd64 x86
-      ZTS_STATES: enable disable
-    - PHP_REL: 7.1
-      ARCHITECTURES: amd64 x86
-      ZTS_STATES: enable disable
+      ARCHITECTURES: amd64
+      ZTS_STATES: enable
+#    - PHP_REL: 7.1
+#      ARCHITECTURES: amd64 x86
+#      ZTS_STATES: enable disable
 
 install:
 - cmd: cinst wget
@@ -20,7 +20,7 @@ build_script:
 
 artifacts:
   - path: artifacts
-    name: php_win32service-%APPVEYOR_REPO_BRANCH%-%PHP_REL%-vc14
+    name: php_win32service-%APPVEYOR_REPO_TAG_NAME%-%PHP_REL%-vc14
     type: zip
 
 #deploy:
