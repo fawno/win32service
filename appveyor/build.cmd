@@ -3,7 +3,7 @@ setlocal enableextensions enabledelayedexpansion
 	set PHP_INI_SCAN_DIR=%APPVEYOR_BUILD_FOLDER%\build\modules.d
 
 	cd %APPVEYOR_BUILD_FOLDER%\appveyor
-	wget -N --progress=none http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
+	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
 	7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
 
 	git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
@@ -23,7 +23,7 @@ setlocal enableextensions enabledelayedexpansion
 		call C:\projects\php-sdk\bin\phpsdk_setvars.bat
 
 		cd %APPVEYOR_BUILD_FOLDER%\appveyor
-		wget -N --progress=none http://windows.php.net/downloads/php-sdk/deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z
+		wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z
 		7z x -y deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z -oC:\projects\php-src
 
 		@for %%z in (%ZTS_STATES%) do (
