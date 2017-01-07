@@ -43,7 +43,16 @@ setlocal enableextensions enabledelayedexpansion
 	)
 
 	if "%APPVEYOR_REPO_TAG_NAME%"=="" (
-		set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT:~0,8%
-		appveyor SetVariable -Name APPVEYOR_REPO_TAG_NAME -Value %APPVEYOR_REPO_COMMIT:~0,8%
+		for /f "delims=" %%l in (php_win32service.h) do (
+			if not "%%l"=="" (
+				set line=%%l
+				if "!line:~8,24!"=="PHP_WIN32SERVICE_VERSION" (
+					set APPVEYOR_REPO_TAG_NAME=!line:~34,-1!-%APPVEYOR_REPO_COMMIT:~0,8%
+				)
+			)
+		)
+		if "!APPVEYOR_REPO_TAG_NAME!"=="" set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT:~0,8%
+
+		appveyor SetVariable -Name APPVEYOR_REPO_TAG_NAME -Value !APPVEYOR_REPO_TAG_NAME!
 	)
 endlocal
