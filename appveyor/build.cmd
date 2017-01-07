@@ -13,11 +13,6 @@ setlocal enableextensions enabledelayedexpansion
 	xcopy C:\projects\win32service\*.php C:\projects\win32service\artifacts /y
 	set > C:\projects\win32service\artifacts\environment.txt
 
-rem	set ARCHITECTURES=amd64 x86
-rem	set ZTS_STATES=enable disable
-	set ARCHITECTURES=amd64
-	set ZTS_STATES=enable
-
 	for %%a in (%ARCHITECTURES%) do (
 		set ARCH=%%a
 		if "!ARCH!"=="amd64" set DEPTS_ARCH=x64
@@ -37,8 +32,7 @@ rem	set ZTS_STATES=enable disable
 			cd C:\projects\php-src
 			call buildconf.bat
 
-			rem call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
-			call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared
+			call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
 
 			nmake
 			nmake install
