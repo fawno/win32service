@@ -8,6 +8,7 @@ setlocal enableextensions enabledelayedexpansion
 	xcopy %APPVEYOR_BUILD_FOLDER%\LICENSE %APPVEYOR_BUILD_FOLDER%\artifacts\ /y /f
 	xcopy %APPVEYOR_BUILD_FOLDER%\examples %APPVEYOR_BUILD_FOLDER%\artifacts\examples\ /y /f
 
+goto end
 	cd %APPVEYOR_BUILD_FOLDER%\appveyor
 	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
 	7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
@@ -34,24 +35,26 @@ setlocal enableextensions enabledelayedexpansion
 			call buildconf.bat
 			call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=%APPVEYOR_BUILD_FOLDER%\build\modules.d --with-prefix=%APPVEYOR_BUILD_FOLDER%\build --with-php-build=deps
 
-			echo nmake
-			echo nmake install
+			nmake
+			nmake install
 
-			echo cd %APPVEYOR_BUILD_FOLDER%
-			echo move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
+			cd %APPVEYOR_BUILD_FOLDER%
+			move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
 		)
 	)
+:end
 
 	if "%APPVEYOR_REPO_TAG_NAME%"=="" (
 		for /f "delims=" %%l in (php_win32service.h) do (
 			if not "%%l"=="" (
 				set line=%%l
+				echo "!line:~8,24!"
 				if "!line:~8,24!"=="PHP_WIN32SERVICE_VERSION" (
-					set APPVEYOR_REPO_TAG_NAME=!line:~34,-1!-%APPVEYOR_REPO_COMMIT:~0,8%
+					set APPVEYOR_REPO_TAG_NAME=!line:~34,-1!-%APPVEYOR_REPO_BRANCH%-%APPVEYOR_REPO_COMMIT:~0,8%
 				)
 			)
 		)
-		if "!APPVEYOR_REPO_TAG_NAME!"=="" set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_COMMIT:~0,8%
+		if "!APPVEYOR_REPO_TAG_NAME!"=="" set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_BRANCH%-%APPVEYOR_REPO_COMMIT:~0,8%
 
 		appveyor SetVariable -Name APPVEYOR_REPO_TAG_NAME -Value !APPVEYOR_REPO_TAG_NAME!
 	)
