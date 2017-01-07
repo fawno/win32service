@@ -22,8 +22,8 @@ artifacts:
     name: php_win32service-%PHP_REL%-vc14
     type: zip
 
-deploy:
-- provider: Environment
-  name: win32service
-  on:
-    appveyor_repo_tag: true
+#deploy:
+#- provider: Environment
+#  name: win32service
+#  on:
+#    appveyor_repo_tag: true
