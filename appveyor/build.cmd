@@ -41,6 +41,4 @@ setlocal enableextensions enabledelayedexpansion
 			move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
 		)
 	)
-
-	set
 endlocal

@@ -20,7 +20,7 @@ build_script:
 
 artifacts:
   - path: artifacts
-    name: php_win32service-%PHP_REL%-vc14
+    name: php_win32service-%APPVEYOR_REPO_BRANCH%-%PHP_REL%-vc14
     type: zip
 
 #deploy:
