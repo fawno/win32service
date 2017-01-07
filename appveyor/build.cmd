@@ -2,7 +2,8 @@
 setlocal enableextensions enabledelayedexpansion
 	set PHP_INI_SCAN_DIR=%APPVEYOR_BUILD_FOLDER%\build\modules.d
 
-	cd %APPVEYOR_BUILD_FOLDER%\appveyor
+	mkdir c:\appveyor
+	cd c:\appveyor
 	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
 	7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
 
@@ -22,7 +23,7 @@ setlocal enableextensions enabledelayedexpansion
 		call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" !ARCH!
 		call C:\projects\php-sdk\bin\phpsdk_setvars.bat
 
-		cd %APPVEYOR_BUILD_FOLDER%\appveyor
+		cd c:\appveyor
 		wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z
 		7z x -y deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z -oC:\projects\php-src
 
