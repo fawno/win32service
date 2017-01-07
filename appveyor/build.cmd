@@ -2,7 +2,10 @@
 setlocal enableextensions enabledelayedexpansion
 	set PHP_INI_SCAN_DIR=%APPVEYOR_BUILD_FOLDER%\build\modules.d
 
-	mkdir c:\appveyor
+	@if not exist c:\appveyor\. (
+		mkdir c:\appveyor
+	)
+
 	cd c:\appveyor
 	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
 	7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
@@ -43,13 +46,6 @@ setlocal enableextensions enabledelayedexpansion
 			copy build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
 			cd build
 			php -i > ..\artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.txt
-			php ..\artifacts\service.php create >> ..\artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.log
-			sleep 15
-			php ..\artifacts\service.php start >> ..\artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.log
-			sleep 20
-			php ..\artifacts\service.php stop >> ..\artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.log
-			sleep 15
-			php ..\artifacts\service.php delete >> ..\artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.log
 		)
 	)
 endlocal
