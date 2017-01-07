@@ -2,13 +2,16 @@ version: "{branch}.build.{build}"
 
 image: Visual Studio 2015
 
+cache:
+  - appveyor -> appveyor.yml
+
 environment:
   matrix:
     - PHP_REL: 7.0
-      ARCHITECTURES: amd64 x86
+      ARCHITECTURES: amd64
       ZTS_STATES: enable disable
     - PHP_REL: 7.1
-      ARCHITECTURES: amd64 x86
+      ARCHITECTURES: amd64
       ZTS_STATES: enable disable
 
 install:
