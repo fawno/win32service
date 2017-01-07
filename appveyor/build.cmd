@@ -7,11 +7,10 @@ setlocal enableextensions enabledelayedexpansion
 	echo git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
 	git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
 
-	mkdir C:\projects\php-src\ext\win32service
-	xcopy %APPVEYOR_BUILD_FOLDER% C:\projects\php-src\ext\win32service /s /e /y
+	xcopy %APPVEYOR_BUILD_FOLDER% C:\projects\php-src\ext\win32service\ /s /e /y /f
 
-	mkdir %APPVEYOR_BUILD_FOLDER%\artifacts
-	xcopy %APPVEYOR_BUILD_FOLDER%\*.php %APPVEYOR_BUILD_FOLDER%\artifacts /y
+	xcopy %APPVEYOR_BUILD_FOLDER%\LICENSE %APPVEYOR_BUILD_FOLDER%\artifacts\ /y /f
+	xcopy %APPVEYOR_BUILD_FOLDER%\examples %APPVEYOR_BUILD_FOLDER%\artifacts\examples\ /y /f
 
 	for %%a in (%ARCHITECTURES%) do (
 		set ARCH=%%a
@@ -32,16 +31,10 @@ setlocal enableextensions enabledelayedexpansion
 
 			cd C:\projects\php-src
 
-			echo buildconf.bat
 			call buildconf.bat
-
-			echo configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=%APPVEYOR_BUILD_FOLDER%\build\modules.d --with-prefix=%APPVEYOR_BUILD_FOLDER%\build --with-php-build=deps
 			call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=%APPVEYOR_BUILD_FOLDER%\build\modules.d --with-prefix=%APPVEYOR_BUILD_FOLDER%\build --with-php-build=deps
 
-			echo nmake
 			nmake
-
-			echo nmake install
 			nmake install
 
 			cd %APPVEYOR_BUILD_FOLDER%
