@@ -23,11 +23,11 @@ rem	set ZTS_STATES=enable disable
 		if "!ARCH!"=="amd64" set DEPTS_ARCH=x64
 		if "!ARCH!"=="x86" set DEPTS_ARCH=x86
 
-		call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" %ARCH%
+		call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" !ARCH!
 		call C:\projects\php-sdk\bin\phpsdk_setvars.bat
 
-		wget http://windows.php.net/downloads/php-sdk/deps-%PHP_REL%-vc14-%DEPTS_ARCH%.7z
-		7z x -y deps-%PHP_REL%-vc14-%DEPTS_ARCH%.7z -oC:\projects\php-src
+		wget http://windows.php.net/downloads/php-sdk/deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z
+		7z x -y deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z -oC:\projects\php-src
 
 		for %%z in (%ZTS_STATES%) do (
 			set ZTS_STATE=%%z
