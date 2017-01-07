@@ -31,11 +31,17 @@ setlocal enableextensions enabledelayedexpansion
 			if "!ZTS_STATE!"=="disable" set ZTS_SHORT=nts
 
 			cd C:\projects\php-src
-			call buildconf.bat
-			rem call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=%APPVEYOR_BUILD_FOLDER%\build\modules.d --with-prefix=%APPVEYOR_BUILD_FOLDER%\build --with-php-build=deps
-			call configure.bat --disable-all --with-php-build=deps --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared
 
+			echo buildconf.bat
+			call buildconf.bat
+
+			echo configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=%APPVEYOR_BUILD_FOLDER%\build\modules.d --with-prefix=%APPVEYOR_BUILD_FOLDER%\build --with-php-build=deps
+			call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=%APPVEYOR_BUILD_FOLDER%\build\modules.d --with-prefix=%APPVEYOR_BUILD_FOLDER%\build --with-php-build=deps
+
+			echo nmake
 			nmake
+
+			echo nmake install
 			nmake install
 
 			cd %APPVEYOR_BUILD_FOLDER%
