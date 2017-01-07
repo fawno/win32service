@@ -1,7 +1,7 @@
 @echo off
 setlocal enableextensions enabledelayedexpansion
-	echo git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
-	git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
+echo	echo git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
+echo	git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
 
 	xcopy %APPVEYOR_BUILD_FOLDER% C:\projects\php-src\ext\win32service\ /s /e /y /f
 
@@ -45,17 +45,16 @@ goto end
 :end
 
 	if "%APPVEYOR_REPO_TAG_NAME%"=="" (
+		set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_BRANCH%-%APPVEYOR_REPO_COMMIT:~0,8%
 		for /f "delims=" %%l in (php_win32service.h) do (
 			if not "%%l"=="" (
 				set line=%%l
-				echo "!line:~8,24!"
 				if "!line:~8,24!"=="PHP_WIN32SERVICE_VERSION" (
 					set APPVEYOR_REPO_TAG_NAME=!line:~34,-1!-%APPVEYOR_REPO_BRANCH%-%APPVEYOR_REPO_COMMIT:~0,8%
 				)
 			)
 		)
-		if "!APPVEYOR_REPO_TAG_NAME!"=="" set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_BRANCH%-%APPVEYOR_REPO_COMMIT:~0,8%
-
+		echo !APPVEYOR_REPO_TAG_NAME!
 		appveyor SetVariable -Name APPVEYOR_REPO_TAG_NAME -Value !APPVEYOR_REPO_TAG_NAME!
 	)
 endlocal
