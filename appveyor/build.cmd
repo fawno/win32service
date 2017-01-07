@@ -22,22 +22,22 @@ setlocal enableextensions enabledelayedexpansion
 		call C:\projects\php-sdk\bin\phpsdk_setvars.bat
 
 		wget http://windows.php.net/downloads/php-sdk/deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z
-		7z x -y deps-%PHP_REL%-vc14-%DEPTS_ARCH%.7z -oC:\projects\php-src
+		7z x -y deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z -oC:\projects\php-src
 
 		for %%z in (%ZTS_STATES%) do (
 			set ZTS_STATE=%%z
 			if "!ZTS_STATE!"=="enable" set ZTS_SHORT=ts
 			if "!ZTS_STATE!"=="disable" set ZTS_SHORT=nts
 
-echo			cd C:\projects\php-src
-echo			call buildconf.bat
-echo			call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
+			cd C:\projects\php-src
+			call buildconf.bat
+			call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=C:\projects\win32service\build\modules.d --with-prefix=C:\projects\win32service\build --with-php-build=deps
 
-echo			nmake
-echo			nmake install
+			nmake
+			nmake install
 
-echo			cd %APPVEYOR_BUILD_FOLDER%
-echo			move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
+			cd %APPVEYOR_BUILD_FOLDER%
+			move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
 		)
 	)
 
