@@ -5,11 +5,11 @@ image: Visual Studio 2015
 environment:
   matrix:
     - PHP_REL: 7.0
-      ARCHITECTURES: amd64
-      ZTS_STATES: enable
-#    - PHP_REL: 7.1
-#      ARCHITECTURES: amd64 x86
-#      ZTS_STATES: enable disable
+      ARCHITECTURES: amd64 x86
+      ZTS_STATES: enable disable
+    - PHP_REL: 7.1
+      ARCHITECTURES: amd64 x86
+      ZTS_STATES: enable disable
 
 install:
 - cmd: cinst wget

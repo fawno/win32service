@@ -1,14 +1,13 @@
 @echo off
 setlocal enableextensions enabledelayedexpansion
-echo	echo git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
-echo	git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
+	echo git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
+	git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
 
 	xcopy %APPVEYOR_BUILD_FOLDER% C:\projects\php-src\ext\win32service\ /s /e /y /f
 
 	xcopy %APPVEYOR_BUILD_FOLDER%\LICENSE %APPVEYOR_BUILD_FOLDER%\artifacts\ /y /f
 	xcopy %APPVEYOR_BUILD_FOLDER%\examples %APPVEYOR_BUILD_FOLDER%\artifacts\examples\ /y /f
 
-goto end
 	cd %APPVEYOR_BUILD_FOLDER%\appveyor
 	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
 	7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
@@ -42,7 +41,6 @@ goto end
 			move build\ext\php_win32service.dll artifacts\php_win32service-%PHP_REL%-vc14-!ZTS_SHORT!-!DEPTS_ARCH!.dll
 		)
 	)
-:end
 
 	if "%APPVEYOR_REPO_TAG_NAME%"=="" (
 		set APPVEYOR_REPO_TAG_NAME=%APPVEYOR_REPO_BRANCH%-%APPVEYOR_REPO_COMMIT:~0,8%
@@ -54,7 +52,7 @@ goto end
 				)
 			)
 		)
-		echo !APPVEYOR_REPO_TAG_NAME!
+
 		appveyor SetVariable -Name APPVEYOR_REPO_TAG_NAME -Value !APPVEYOR_REPO_TAG_NAME!
 	)
 endlocal
