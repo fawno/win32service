@@ -1,9 +1,5 @@
 @echo off
 setlocal enableextensions enabledelayedexpansion
-	cd %APPVEYOR_BUILD_FOLDER%\appveyor
-	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
-	7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
-
 	echo git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
 	git clone -q --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
 
@@ -11,6 +7,10 @@ setlocal enableextensions enabledelayedexpansion
 
 	xcopy %APPVEYOR_BUILD_FOLDER%\LICENSE %APPVEYOR_BUILD_FOLDER%\artifacts\ /y /f
 	xcopy %APPVEYOR_BUILD_FOLDER%\examples %APPVEYOR_BUILD_FOLDER%\artifacts\examples\ /y /f
+
+	cd %APPVEYOR_BUILD_FOLDER%\appveyor
+	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
+	7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
 
 	for %%a in (%ARCHITECTURES%) do (
 		set ARCH=%%a
