@@ -3,8 +3,12 @@ version: '{branch}.{build}'
 
 environment:
   matrix:
-    - PHP_REL: 7.0
+#    - PHP_REL: 7.0
+#      ARCHITECTURES: amd64 x86
+#      ZTS_STATES: enable disable
     - PHP_REL: 7.1
+      ARCHITECTURES: amd64
+      ZTS_STATES: enable
 
 install:
 - cmd: cinst wget
