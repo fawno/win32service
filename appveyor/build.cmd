@@ -1,7 +1,5 @@
 @echo off
 setlocal enableextensions enabledelayedexpansion
-	set PHP_INI_SCAN_DIR=%APPVEYOR_BUILD_FOLDER%\build\modules.d
-
 	cd %APPVEYOR_BUILD_FOLDER%\appveyor
 	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
 	7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
@@ -34,7 +32,8 @@ setlocal enableextensions enabledelayedexpansion
 
 			cd C:\projects\php-src
 			call buildconf.bat
-			call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=%APPVEYOR_BUILD_FOLDER%\build\modules.d --with-prefix=%APPVEYOR_BUILD_FOLDER%\build --with-php-build=deps
+			rem call configure.bat --disable-all --with-mp=auto --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared --with-config-file-scan-dir=%APPVEYOR_BUILD_FOLDER%\build\modules.d --with-prefix=%APPVEYOR_BUILD_FOLDER%\build --with-php-build=deps
+			call configure.bat --disable-all --with-php-build=deps --enable-cli --!ZTS_STATE!-zts --enable-win32service=shared
 
 			nmake
 			nmake install
