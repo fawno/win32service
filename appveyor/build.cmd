@@ -15,7 +15,7 @@ setlocal enableextensions enabledelayedexpansion
 	mkdir C:\projects\win32service\artifacts
 	xcopy C:\projects\win32service\*.php C:\projects\win32service\artifacts /y
 
-	for %%a in (%ARCHITECTURES%) do (
+	@for %%a in (%ARCHITECTURES%) do (
 		set ARCH=%%a
 		if "!ARCH!"=="amd64" set DEPTS_ARCH=x64
 		if "!ARCH!"=="x86" set DEPTS_ARCH=x86
@@ -26,7 +26,7 @@ setlocal enableextensions enabledelayedexpansion
 		wget http://windows.php.net/downloads/php-sdk/deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z
 		7z x -y deps-%PHP_REL%-vc14-!DEPTS_ARCH!.7z -oC:\projects\php-src
 
-		for %%z in (%ZTS_STATES%) do (
+		@for %%z in (%ZTS_STATES%) do (
 			set ZTS_STATE=%%z
 			if "!ZTS_STATE!"=="enable" set ZTS_SHORT=ts
 			if "!ZTS_STATE!"=="disable" set ZTS_SHORT=nts
