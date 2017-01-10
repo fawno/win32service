@@ -630,12 +630,14 @@ static void init_globals(zend_win32service_globals *g)
 
 static PHP_MINIT_FUNCTION(win32service)
 {
+/*
 	if (strcmp(sapi_module.name, "cli") != 0) {
 		zend_error(E_CORE_WARNING, "The Win32Service extension is only available when using the CLI SAPI");
 		return FAILURE;
 	}
-	
-	if (PHP_MAJOR_VERSION == 7 && (PHP_MINOR_VERSION == 0 || PHP_MINOR_VERSION == 1) && PHP_RELEASE_VERSION == 0) {
+*/
+
+  if (PHP_MAJOR_VERSION == 7 && (PHP_MINOR_VERSION == 0 || PHP_MINOR_VERSION == 1) && PHP_RELEASE_VERSION == 0) {
 #if PHP_MINOR_VERSION == 0
 		zend_error(E_CORE_ERROR, "The Win32Service extension not work on PHP 7.0.0. Work with 7.0.1+");
 #elif PHP_MINOR_VERSION == 1

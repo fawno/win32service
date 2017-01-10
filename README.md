@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/7wqljie1knsrtfkh/branch/php-7.0?svg=true)](https://ci.appveyor.com/project/macintoshplus/win32service/branch/php-7.0)
+[![Build status](https://ci.appveyor.com/api/projects/status/5mcvf3jt57dig21m/branch/no-cli-constraint?svg=true)](https://ci.appveyor.com/project/alphp/win32service/branch/no-cli-constraint)
 [![License](https://img.shields.io/badge/license-PHP_License-blue.svg?style=plastic)](http://www.php.net/license/3_01.txt)
 
 # Win32Service

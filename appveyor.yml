@@ -1,5 +1,6 @@
+version: "{branch}.build.{build}"
+
 image: Visual Studio 2015
-version: '{branch}.{build}'
 
 environment:
   matrix:
