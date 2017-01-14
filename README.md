@@ -1,4 +1,5 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/7wqljie1knsrtfkh/branch/php7?svg=true)](https://ci.appveyor.com/project/macintoshplus/win32service/branch/php7)
+[![GitHub release](https://img.shields.io/github/release/alphp/win32service.svg)](https://github.com/alphp/win32service/releases/latest)
 [![License](https://img.shields.io/badge/license-PHP_License-blue.svg)](http://www.php.net/license/3_01.txt)
 [![Documentation](https://img.shields.io/badge/manual-win32service-blue.svg)](http://php.net/manual/en/book.win32service.php)
 
