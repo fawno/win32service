@@ -13,8 +13,10 @@ setlocal enableextensions enabledelayedexpansion
 		git --git-dir="%SDK_CACHE%\.git" --work-tree="%SDK_CACHE%" checkout --force %SDK_BRANCH%
 	)
 
-	echo git clone -q --depth=1 --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
-	git clone -q --depth=1 --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
+	rem echo git clone -q --depth=1 --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
+	rem git clone -q --depth=1 --branch=PHP-%PHP_REL% https://github.com/php/php-src C:\projects\php-src
+	echo git clone -q --depth=1 --branch=master https://github.com/php/php-src C:\projects\php-src
+	git clone -q --depth=1 --branch=master https://github.com/php/php-src C:\projects\php-src
 
 	xcopy %APPVEYOR_BUILD_FOLDER% C:\projects\php-src\ext\win32service\ /s /e /y /f
 
