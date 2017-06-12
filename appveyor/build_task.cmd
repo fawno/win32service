@@ -1,9 +1,12 @@
 @echo off
 setlocal enableextensions enabledelayedexpansion
+	echo ARCH %ARCH% !ARCH!
 	rem wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/deps-%PHP_REL%-vc15-!ARCH!.7z -P %CACHE_ROOT%
 	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/deps-master-vc15-%ARCH%.7z -P %CACHE_ROOT%
+	wget -N --progress=bar:force:noscroll http://windows.php.net/downloads/php-sdk/deps-master-vc15-!ARCH!.7z -P %CACHE_ROOT%
 	rem 7z x -y %CACHE_ROOT%\deps-%PHP_REL%-vc15-%ARCH%.7z -oC:\projects\php-src
 	7z x -y %CACHE_ROOT%\deps-master-vc15-%ARCH%.7z -oC:\projects\php-src
+	7z x -y %CACHE_ROOT%\deps-master-vc15-!ARCH!.7z -oC:\projects\php-src
 
 	for %%z in (%ZTS_STATES%) do (
 		set ZTS_STATE=%%z

@@ -16,4 +16,5 @@ setlocal enableextensions enabledelayedexpansion
 	)
 	rmdir /s /q %CACHE_ROOT%
 	mkdir %CACHE_ROOT%
+	mkdir %SDK_CACHE%
 endlocal
