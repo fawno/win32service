@@ -14,6 +14,5 @@ setlocal enableextensions enabledelayedexpansion
 		if %errorlevel% neq 0 exit /b 3
 
 	)
-	rmdir /s /q %CACHE_ROOT%
-	mkdir %CACHE_ROOT%
+	del /f /q  %CACHE_ROOT%\*vc15*.7z
 endlocal
