@@ -14,5 +14,5 @@ setlocal enableextensions enabledelayedexpansion
 		if %errorlevel% neq 0 exit /b 3
 
 	)
-	del /f /q  %CACHE_ROOT%\*vc15*.7z
+	rem del /f /q  %CACHE_ROOT%\*vc15*.7z
 endlocal
