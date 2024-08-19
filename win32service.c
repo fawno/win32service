@@ -2,7 +2,7 @@
  +----------------------------------------------------------------------+
  | PHP Version 8                                                        |
  +----------------------------------------------------------------------+
- | Copyright (c) 1997-2020 The PHP Group                                |
+ | Copyright (c) 1997-2024 The PHP Group                                |
  +----------------------------------------------------------------------+
  | This source file is subject to version 3.0 of the PHP license,       |
  | that is bundled with this package in the file LICENSE, and is        |
@@ -45,123 +45,90 @@
 static void *tmp_service_g = NULL;
 
 
-static DWORD WINAPI
-service_handler(DWORD
-dwControl,
-DWORD dwEventType, LPVOID
-lpEventData,
-LPVOID lpContext
-)
-{
-zend_win32service_globals *g = (zend_win32service_globals *) lpContext;
-DWORD code = NO_ERROR;
+static DWORD WINAPI service_handler(DWORD dwControl, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext) {
+    zend_win32service_globals *g = (zend_win32service_globals *) lpContext;
+    DWORD code = NO_ERROR;
 
-g->args.
-dwControl = dwControl;
-g->args.
-dwEventType = dwEventType;
-g->args.
-lpEventData = lpEventData; /* not safe to touch without copying for later reference */
+    g->args.dwControl = dwControl;
+    g->args.dwEventType = dwEventType;
+    g->args.lpEventData = lpEventData; /* not safe to touch without copying for later reference */
 
-if (dwControl == SERVICE_CONTROL_STOP) {
-g->st.
-dwCurrentState = SERVICE_STOP_PENDING;
+    if (dwControl == SERVICE_CONTROL_STOP) {
+        g->st.dwCurrentState = SERVICE_STOP_PENDING;
+    }
+
+    SetServiceStatus(g->sh, &g->st);
+
+    return code;
 }
 
-SetServiceStatus(g
-->sh, &g->st);
+static void WINAPI service_main(DWORD argc, char **argv) {
+    zend_win32service_globals *g = (zend_win32service_globals *) tmp_service_g;
+    DWORD base_priority;
+    HKEY hKey;
+    char *service_key;
+    long registry_result = ERROR_SUCCESS;
+    DWORD dwType = REG_DWORD;
+    DWORD dwSize = sizeof(DWORD);
 
-return
-code;
-}
+    // Set the base priority for this service.
+    /*spprintf(&service_key, 0, "%s%s", SERVICES_REG_KEY_ROOT, g->service_name);
 
-static void WINAPI
-service_main(DWORD
-argc,
-char **argv
-)
-{
-zend_win32service_globals *g = (zend_win32service_globals *) tmp_service_g;
-DWORD base_priority;
-HKEY hKey;
-char *service_key;
-long registry_result = ERROR_SUCCESS;
-DWORD dwType = REG_DWORD;
-DWORD dwSize = sizeof(DWORD);
+    registry_result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, service_key, 0, KEY_ALL_ACCESS, &hKey);
+    if (ERROR_SUCCESS == registry_result) {
+        registry_result = RegQueryValueEx(hKey, SERVICES_REG_BASE_PRIORITY, 0, &dwType, (LPBYTE)&base_priority, &dwSize);
+    }
 
-// Set the base priority for this service.
-/*spprintf(&service_key, 0, "%s%s", SERVICES_REG_KEY_ROOT, g->service_name);
+    efree(service_key);
 
-registry_result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, service_key, 0, KEY_ALL_ACCESS, &hKey);
-if (ERROR_SUCCESS == registry_result) {
-    registry_result = RegQueryValueEx(hKey, SERVICES_REG_BASE_PRIORITY, 0, &dwType, (LPBYTE)&base_priority, &dwSize);
-}
+    if (hKey) {
+        RegCloseKey(hKey);
+    }
 
-efree(service_key);
+    if (ERROR_SUCCESS != registry_result) {
+        g->code = registry_result;
+        SetEvent(g->event);
+        return;
+    }
 
-if (hKey) {
-    RegCloseKey(hKey);
-}
+    if(!SetPriorityClass(GetCurrentProcess(), base_priority)) {
+        g->code = GetLastError();
+        SetEvent(g->event);
+        return;
+    }*/
 
-if (ERROR_SUCCESS != registry_result) {
-    g->code = registry_result;
+    g->st.dwServiceType = SERVICE_WIN32;
+    g->st.dwCurrentState = SERVICE_START_PENDING;
+    g->st.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN | SERVICE_ACCEPT_PAUSE_CONTINUE |
+                         SERVICE_ACCEPT_HARDWAREPROFILECHANGE | SERVICE_ACCEPT_NETBINDCHANGE |
+                         SERVICE_ACCEPT_PARAMCHANGE | SERVICE_ACCEPT_POWEREVENT | SERVICE_ACCEPT_SESSIONCHANGE |
+                         SERVICE_ACCEPT_PRESHUTDOWN | SERVICE_ACCEPT_TIMECHANGE | SERVICE_ACCEPT_TRIGGEREVENT;
+
+    g->sh = RegisterServiceCtrlHandlerEx(g->service_name, service_handler, g);
+
+    if (g->sh == (SERVICE_STATUS_HANDLE)0) {
+        g->code = GetLastError();
+        SetEvent(g->event);
+        return;
+    }
+
+    g->code = NO_ERROR;
     SetEvent(g->event);
-    return;
 }
 
-if(!SetPriorityClass(GetCurrentProcess(), base_priority)) {
-    g->code = GetLastError();
-    SetEvent(g->event);
-    return;
-}*/
+static DWORD WINAPI svc_thread_proc(LPVOID _globals) {
+    zend_win32service_globals *g = (zend_win32service_globals *) _globals;
 
-g->st.
-dwServiceType = SERVICE_WIN32;
-g->st.
-dwCurrentState = SERVICE_START_PENDING;
-g->st.
-dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN | SERVICE_ACCEPT_PAUSE_CONTINUE |
-                     SERVICE_ACCEPT_HARDWAREPROFILECHANGE | SERVICE_ACCEPT_NETBINDCHANGE |
-                     SERVICE_ACCEPT_PARAMCHANGE | SERVICE_ACCEPT_POWEREVENT | SERVICE_ACCEPT_SESSIONCHANGE |
-                     SERVICE_ACCEPT_PRESHUTDOWN | SERVICE_ACCEPT_TIMECHANGE | SERVICE_ACCEPT_TRIGGEREVENT;
+    tmp_service_g = g;
 
-g->
-sh = RegisterServiceCtrlHandlerEx(g->service_name, service_handler, g);
+    if (!StartServiceCtrlDispatcher(g->te)) {
+        g->code = GetLastError();
+        SetEvent(g->event);
+        return 1;
+    }
 
-if (g->sh == (SERVICE_STATUS_HANDLE)0) {
-g->
-code = GetLastError();
-SetEvent(g
-->event);
-return;
-}
-
-g->
-code = NO_ERROR;
-SetEvent(g
-->event);
-}
-
-static DWORD WINAPI
-svc_thread_proc(LPVOID
-_globals)
-{
-zend_win32service_globals *g = (zend_win32service_globals *) _globals;
-
-tmp_service_g = g;
-
-if (!
-StartServiceCtrlDispatcher(g
-->te)) {
-g->
-code = GetLastError();
-SetEvent(g
-->event);
-return 1;
-}
-
-/* not reached until service_main returns */
-return 0;
+    /* not reached until service_main returns */
+    return 0;
 }
 
 static void convert_error_to_exception(DWORD code, const char *message) {
