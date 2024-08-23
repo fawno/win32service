@@ -11,25 +11,11 @@ function displayException(Throwable $e){
 }
 
 try {
-    win32_start_service_ctrl_dispatcher(new stdClass());
+    win32_start_service_ctrl_dispatcher('service');
 } catch (Throwable $e) {
     displayException($e);
 }
-
-try {
-    win32_start_service_ctrl_dispatcher('');
-} catch (Throwable $e) {
-    displayException($e);
-}
-try {
-    var_dump(win32_start_service_ctrl_dispatcher('service'));
-} catch (Throwable $e) {
-    displayException($e);
-}
-
 
 ?>
---EXPECTF--
-TypeError: (0) win32_start_service_ctrl_dispatcher(): Argument #1 ($name) must be of type string, stdClass given
-ValueError: (0) win32_start_service_ctrl_dispatcher(): Argument #1 ($name) the value cannot be empty
-Win32ServiceException: (1063) Error failed service controller connect ()
+--EXPECT--
+Win32ServiceException: (0) This function work only when using the CLI SAPI and called into the service code.

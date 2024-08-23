@@ -22,7 +22,7 @@
         <email>jbnahan@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2024-07-24</date>
+    <date>2024-08-24</date>
     <time>21:30:00</time>
     <version>
         <release>1.1.0-beta1</release>
@@ -42,6 +42,9 @@
     * Add function win32_add_service_env_var()
     * Add function win32_remove_service_env_var()
     * Add function win32_get_service_env_vars()
+    * Add function win32_set_service_pause_resume_state()
+    * Some function are now disabled if PHP not run in Windows service context. See PHP Information.
+
      The binary is also available here: https://github.com/win32service/win32service/releases/tag/v1.1.0-beta1
  ]]></notes>
     <contents>
@@ -100,6 +103,8 @@
     * Add function win32_add_service_env_var()
     * Add function win32_remove_service_env_var()
     * Add function win32_get_service_env_vars()
+    * Add function win32_set_service_pause_resume_state()
+    * Some function are now disabled if PHP not run in Windows service context. See PHP Information.
  ]]></notes>
         </release>
         <release>

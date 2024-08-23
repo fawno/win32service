@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 8                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2020 The PHP Group                                |
+  | Copyright (c) 1997-2024 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.0 of the PHP license,       |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -39,6 +39,7 @@ ZEND_BEGIN_MODULE_GLOBALS(win32service)
 	SERVICE_STATUS 			st;
 	SERVICE_STATUS_HANDLE	sh;
 	SERVICE_TABLE_ENTRY		te[2];
+    DWORD dwControlsAccepted;
 	char *service_name;
 	/* args for the control handler */
 	struct {

@@ -1,10 +1,16 @@
-# Version 1.1.0 beta 1 (2024-07-24)
+# Version 1.1.0 beta 1 (2024-08-24)
 
-* Add object \Win32Service\RightInfo
-* Add function win32_read_right_access_service()
-* Add function win32_read_all_rights_access_service()
-* Add function win32_add_right_access_service()
-* Add function win32_remove_right_access_service()
+* Add object \Win32Service\RightInfo (@macintoshplus) (issue [#81](https://github.com/win32service/win32service/issues/81))
+* Add function win32_read_right_access_service() (@macintoshplus) (issue [#81](https://github.com/win32service/win32service/issues/81))
+* Add function win32_read_all_rights_access_service() (@macintoshplus) (issue [#81](https://github.com/win32service/win32service/issues/81))
+* Add function win32_add_right_access_service() (@macintoshplus) (issue [#81](https://github.com/win32service/win32service/issues/81))
+* Add function win32_remove_right_access_service() (@macintoshplus) (issue [#81](https://github.com/win32service/win32service/issues/81))
+* Add function win32_set_service_pause_resume_state() (@macintoshplus) (issue [#76](https://github.com/win32service/win32service/issues/76))
+* Add function win32_add_service_env_var() (@macintoshplus) (issue [#80](https://github.com/win32service/win32service/issues/80))
+* Add function win32_remove_service_env_var() (@macintoshplus) (issue [#80](https://github.com/win32service/win32service/issues/80))
+* Add function win32_get_service_env_vars() (@macintoshplus) (issue [#80](https://github.com/win32service/win32service/issues/80))
+* Some function are now disabled if PHP not run in Windows service context. See PHP Information.
+
 
 # Version 1.0.2 (2022-10-13)
 
