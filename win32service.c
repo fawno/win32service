@@ -99,10 +99,7 @@ static void WINAPI service_main(DWORD argc, char **argv) {
 
     g->st.dwServiceType = SERVICE_WIN32;
     g->st.dwCurrentState = SERVICE_START_PENDING;
-    g->st.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN | SERVICE_ACCEPT_PAUSE_CONTINUE |
-                         SERVICE_ACCEPT_HARDWAREPROFILECHANGE | SERVICE_ACCEPT_NETBINDCHANGE |
-                         SERVICE_ACCEPT_PARAMCHANGE | SERVICE_ACCEPT_POWEREVENT | SERVICE_ACCEPT_SESSIONCHANGE |
-                         SERVICE_ACCEPT_PRESHUTDOWN | SERVICE_ACCEPT_TIMECHANGE | SERVICE_ACCEPT_TRIGGEREVENT;
+    g->st.dwControlsAccepted = g->dwControlsAccepted;
 
     g->sh = RegisterServiceCtrlHandlerEx(g->service_name, service_handler, g);
 
@@ -268,10 +265,22 @@ static void convert_error_to_exception(DWORD code, const char *message) {
     }
 }
 
+static bool win32_check_if_is_service() {
+    HWINSTA hWinStation = GetProcessWindowStation();
+    if (hWinStation != NULL) {
+        USEROBJECTFLAGS uof;
+        DWORD lenNeeded;
+        if (GetUserObjectInformation(hWinStation, UOI_FLAGS, &uof, sizeof(uof), &lenNeeded)) {
+            return ((uof.dwFlags & WSF_VISIBLE) == 0 && GetConsoleWindow() == NULL);
+        }
+    }
+    return FALSE;
+}
+
 /* {{{ proto bool win32_start_service_ctrl_dispatcher(string $name, [bool gracefulExit])
    Registers the script with the SCM, so that it can act as the service with the given name */
 static PHP_FUNCTION(win32_start_service_ctrl_dispatcher) {
-    if (strcmp(sapi_module.name, "cli") != 0 && strcmp(sapi_module.name, "embed") != 0) {
+    if (win32_check_if_is_service() == FALSE && strcmp(sapi_module.name, "embed") != 0) {
         zend_throw_exception_ex(Win32ServiceException_ce_ptr, 0,
                                 "This function work only when using the CLI SAPI and called into the service code.");
         RETURN_THROWS();
@@ -325,13 +334,49 @@ static PHP_FUNCTION(win32_start_service_ctrl_dispatcher) {
 }
 /* }}} */
 
+/* {{{ proto bool win32_set_service_pause_resume_state([bool enable])
+    */
+static PHP_FUNCTION(win32_set_service_pause_resume_state) {
+    if (win32_check_if_is_service() == FALSE && strcmp(sapi_module.name, "embed") != 0) {
+        zend_throw_exception_ex(Win32ServiceException_ce_ptr, 0,
+                                "This function work only when using the CLI SAPI and called into the service code.");
+        RETURN_THROWS();
+    }
+    DWORD dwControlsAccepted = SVCG(dwControlsAccepted);
+    zend_bool enable;
+    zend_bool previous_state = (dwControlsAccepted & SERVICE_ACCEPT_PAUSE_CONTINUE) != 0;;
+
+    if (SVCG(svc_thread) && ZEND_NUM_ARGS() > 0) {
+        zend_argument_value_error(1, "Unable to change the pause/resume state when control dispatcher is already running. Call without argument if you want the state or call before win32_start_service_ctrl_dispatcher function.");
+        RETURN_THROWS();
+    }
+
+    if (FAILURE == zend_parse_parameters(ZEND_NUM_ARGS(), "|b", &enable)) {
+        RETURN_THROWS();
+    }
+
+    if (ZEND_NUM_ARGS() > 0) {
+        if (enable) {
+            // Set the SERVICE_ACCEPT_PAUSE_CONTINUE bit
+            dwControlsAccepted |= SERVICE_ACCEPT_PAUSE_CONTINUE;
+        } else {
+            // Clear the SERVICE_ACCEPT_PAUSE_CONTINUE bit
+            dwControlsAccepted &= ~SERVICE_ACCEPT_PAUSE_CONTINUE;
+        }
+        SVCG(dwControlsAccepted) = dwControlsAccepted;
+    }
+
+    RETURN_BOOL(previous_state);
+}
+/* }}} */
+
 /* {{{ proto bool win32_set_service_exit_mode([bool gracefulExit])
    Set (and get) the exit mode of the service, when set to true the service
    will shut down gracefuly when PHP exits, when set to false it will not shut
    down gracefuly, this will mean that the service will count as having failed
    and the recovery action will be run */
 static PHP_FUNCTION(win32_set_service_exit_mode) {
-    if (strcmp(sapi_module.name, "cli") != 0 && strcmp(sapi_module.name, "embed") != 0) {
+    if (win32_check_if_is_service() == FALSE && strcmp(sapi_module.name, "embed") != 0) {
         zend_throw_exception_ex(Win32ServiceException_ce_ptr, 0,
                                 "This function work only when using the CLI SAPI and called into the service code.");
         RETURN_THROWS();
@@ -355,7 +400,7 @@ static PHP_FUNCTION(win32_set_service_exit_mode) {
    gracefuly the int is used for exitCode and the recovery action will be run
    if exit code is not zero */
 static PHP_FUNCTION(win32_set_service_exit_code) {
-    if (strcmp(sapi_module.name, "cli") != 0 && strcmp(sapi_module.name, "embed") != 0) {
+    if (win32_check_if_is_service() == FALSE && strcmp(sapi_module.name, "embed") != 0) {
         zend_throw_exception_ex(Win32ServiceException_ce_ptr, 0,
                                 "This function work only when using the CLI SAPI and called into the service code.");
         RETURN_THROWS();
@@ -376,7 +421,7 @@ static PHP_FUNCTION(win32_set_service_exit_code) {
 /* {{{ proto bool win32_set_service_status(int status, [int checkpoint])
    Update the service status */
 static PHP_FUNCTION(win32_set_service_status) {
-    if (strcmp(sapi_module.name, "cli") != 0 && strcmp(sapi_module.name, "embed") != 0) {
+    if (win32_check_if_is_service() == FALSE && strcmp(sapi_module.name, "embed") != 0) {
         zend_throw_exception_ex(Win32ServiceException_ce_ptr, 0,
                                 "This function work only when using the CLI SAPI and called into the service code.");
         RETURN_THROWS();
@@ -1152,7 +1197,7 @@ static PHP_FUNCTION(win32_delete_service) {
 /* {{{ proto long win32_get_last_control_message()
    Returns the last control message that was sent to this service process */
 static PHP_FUNCTION(win32_get_last_control_message) {
-    if (strcmp(sapi_module.name, "cli") != 0 && strcmp(sapi_module.name, "embed") != 0) {
+    if (win32_check_if_is_service() == FALSE && strcmp(sapi_module.name, "embed") != 0) {
         zend_throw_exception_ex(Win32ServiceException_ce_ptr, 0,
                                 "This function work only when using the CLI SAPI and called into the service code.");
         RETURN_THROWS();
@@ -1671,6 +1716,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_win32_set_service_exit_code, 0, 0, 1)
                 ZEND_ARG_INFO(0, code)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_win32_set_service_pause_resume_state, 0, 0, 1)
+                ZEND_ARG_INFO(0, enable)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_win32_create_service, 0, 0, 1)
                 ZEND_ARG_INFO(0, details)
                 ZEND_ARG_INFO(0, machine)
@@ -1768,6 +1817,7 @@ static zend_function_entry functions[] = {
         PHP_FE(win32_delete_service, arginfo_win32_delete_service)
         PHP_FE(win32_exists_service, arginfo_win32_exists_service)
         PHP_FE(win32_get_last_control_message, arginfo_win32_get_last_control_message)
+        PHP_FE(win32_set_service_pause_resume_state, arginfo_win32_set_service_pause_resume_state)
         PHP_FE(win32_query_service_status, arginfo_win32_query_service_status)
         PHP_FE(win32_start_service, arginfo_win32_start_service)
         PHP_FE(win32_stop_service, arginfo_win32_stop_service)
@@ -1790,6 +1840,10 @@ static void init_globals(zend_win32service_globals *g) {
     memset(g, 0, sizeof(*g));
     g->gracefulExit = 1;
     g->exitCode = 1;
+    g->dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_SHUTDOWN | SERVICE_ACCEPT_PAUSE_CONTINUE |
+                            SERVICE_ACCEPT_HARDWAREPROFILECHANGE | SERVICE_ACCEPT_NETBINDCHANGE |
+                            SERVICE_ACCEPT_PARAMCHANGE | SERVICE_ACCEPT_POWEREVENT | SERVICE_ACCEPT_SESSIONCHANGE |
+                            SERVICE_ACCEPT_PRESHUTDOWN | SERVICE_ACCEPT_TIMECHANGE | SERVICE_ACCEPT_TRIGGEREVENT;
 }
 
 void win32service_register_Win32ServiceException_class(void) {
@@ -2052,7 +2106,7 @@ static PHP_MINFO_FUNCTION(win32service) {
         win32service_info_printf("<tr><td class=\"v\">%s</td></tr>\n",
                                  "The maintainer needs your feedback (good or bad), please send it to: <a href=\"mailto:win32service@mactronique.fr\">win32service@mactronique.fr</a>");
         win32service_info_printf("<tr><td class=\"v\">%s</td></tr>\n",
-                                 "Please report your bugs with this extension here : <a href=\"https://bugs.php.net/report.php\"  target=\"bugreport\">Win32Service PHP extension issue tracker</a>");
+                                 "Please report your bugs with this extension here : <a href=\"https://github.com/win32service/win32service/issues\"  target=\"bugreport\">Win32Service PHP extension issue tracker</a>");
         win32service_info_printf("<tr><td class=\"v\">%s</td></tr>\n",
                                  "Home page: <a href=\"http://win32service.mactronique.fr/\" target=\"mactronique\">http://win32service.mactronique.fr/</a>");
         win32service_info_printf("<tr><td class=\"v\">%s</td></tr>\n",
@@ -2060,7 +2114,7 @@ static PHP_MINFO_FUNCTION(win32service) {
     } else {
         php_info_print_table_row(1,
                                  "The maintainer needs your feedback (good or bad), please send it to: win32service@mactronique.fr");
-        php_info_print_table_row(1, "Please report your bugs with this extension here : https://bugs.php.net/");
+        php_info_print_table_row(1, "Please report your bugs with this extension here : https://github.com/win32service/win32service/issues/");
         php_info_print_table_row(1, "Home page: http://win32service.mactronique.fr/");
         php_info_print_table_row(1,
                                  "Library for help you to use this extension: https://github.com/win32service/service-library and https://github.com/win32service/Win32ServiceBundle for Symfony");
@@ -2072,31 +2126,32 @@ static PHP_MINFO_FUNCTION(win32service) {
     php_info_print_table_row(2, "Win32 Service support", "enabled");
     php_info_print_table_row(2, "Version", PHP_WIN32SERVICE_VERSION);
     php_info_print_table_row(2, "Current SAPI", sapi_module.name);
-    if (strcmp(sapi_module.name, "cli") != 0 && strcmp(sapi_module.name, "embed") != 0) {
-        if (!sapi_module.phpinfo_as_text) {
-            php_info_print_table_row(2, "Security information",
-                                     "The Win32Service extension does work when using the CLI SAPI with administrator right level. On other SAPI, please <a href=\"https://www.php.net/manual/en/win32service.security.php\">check security consideration</a>.");
-        } else {
-            php_info_print_table_row(2, "Security information",
-                                     "The Win32Service extension does work when using the CLI SAPI with administrator right level. On other SAPI, please check security consideration: https://www.php.net/manual/en/win32service.security.php");
-        }
+    php_info_print_table_row(2, "Run in Windows Service context", win32_check_if_is_service() ? "true":"false. Some functions are disabled.");
+    if (!sapi_module.phpinfo_as_text) {
+        php_info_print_table_row(2, "Security information",
+                                 "The Win32Service extension does work when using the CLI SAPI with administrator right level. On other SAPI, please <a href=\"https://www.php.net/manual/en/win32service.security.php\">check security consideration</a>.");
+    } else {
+        php_info_print_table_row(2, "Security information",
+                                 "The Win32Service extension does work when using the CLI SAPI with administrator right level. On other SAPI, please check security consideration: https://www.php.net/manual/en/win32service.security.php");
     }
     php_info_print_table_end();
 
     php_info_print_table_start();
     php_info_print_table_header(2, "Function", "State for the current SAPI");
-    if (!strcmp(sapi_module.name, "cli") || !strcmp(sapi_module.name, "embed")) {
+    if (win32_check_if_is_service() == TRUE || !strcmp(sapi_module.name, "embed")) {
         php_info_print_table_row(2, "win32_start_service_ctrl_dispatcher", "enabled");
         php_info_print_table_row(2, "win32_set_service_status", "enabled");
         php_info_print_table_row(2, "win32_get_last_control_message", "enabled");
         php_info_print_table_row(2, "win32_set_service_exit_mode", "enabled");
         php_info_print_table_row(2, "win32_set_service_exit_code", "enabled");
+        php_info_print_table_row(2, "win32_set_service_pause_resume_state", "enabled");
     } else {
         php_info_print_table_row(2, "win32_start_service_ctrl_dispatcher", "disabled");
         php_info_print_table_row(2, "win32_set_service_status", "disabled");
         php_info_print_table_row(2, "win32_get_last_control_message", "disabled");
         php_info_print_table_row(2, "win32_set_service_exit_mode", "disabled");
         php_info_print_table_row(2, "win32_set_service_exit_code", "disabled");
+        php_info_print_table_row(2, "win32_set_service_pause_resume_state", "disabled");
     }
     php_info_print_table_row(2, "win32_create_service", "enabled");
     php_info_print_table_row(2, "win32_delete_service", "enabled");

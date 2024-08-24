@@ -22,8 +22,15 @@ try {
 var_dump(win32_create_service($service));
 var_dump(win32_start_service($service['service']));
 sleep(15);
-var_dump(win32_query_service_status($service['service']));
+$status = win32_query_service_status($service['service']);
+$status['ProcessId'] = 0;
+var_dump($status);
 var_dump(win32_stop_service($service['service']));
+try {
+    win32_pause_service($service['service']);
+} catch (Win32ServiceException $e) {
+    var_dump($e->getMessage());
+}
 sleep(30);
 var_dump(win32_delete_service($service['service']));
 } catch (Throwable $e) {
@@ -33,7 +40,7 @@ if (is_readable(__DIR__.'/run.log')) {
 echo file_get_contents(__DIR__.'/run.log');
 }
 ?>
---EXPECTF--
+--EXPECT--
 NULL
 NULL
 array(9) {
@@ -42,7 +49,7 @@ array(9) {
   ["CurrentState"]=>
   int(4)
   ["ControlsAccepted"]=>
-  int(2047)
+  int(2045)
   ["Win32ExitCode"]=>
   int(0)
   ["ServiceSpecificExitCode"]=>
@@ -52,10 +59,14 @@ array(9) {
   ["WaitHint"]=>
   int(0)
   ["ProcessId"]=>
-  int(%d)
+  int(0)
   ["ServiceFlags"]=>
   int(0)
 }
 NULL
+string(50) "Error service cannot accept ctrl (on send control)"
 NULL
-Win32ServiceException: (0) Service ctrl dispatcher already running in %s on line %d
+pause/resume old state yes
+pause/resume old state no
+Win32ServiceException: (0) Service ctrl dispatcher already running
+ValueError: (0) win32_set_service_pause_resume_state(): Argument #1 ($enable) Unable to change the pause/resume state when control dispatcher is already running. Call without argument if you want the state or call before win32_start_service_ctrl_dispatcher function.

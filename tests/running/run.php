@@ -5,18 +5,28 @@ try {
     $serviceName = 'WindowsServicePhpTestRun';
 
     $currentStats = win32_query_service_status($serviceName);
+    fwrite($flog, 'pause/resume old state '.(win32_set_service_pause_resume_state(false) ? 'yes':'no')."\n");
+    fwrite($flog, 'pause/resume old state '.(win32_set_service_pause_resume_state(true) ? 'yes':'no')."\n");
 
+    win32_set_service_pause_resume_state(false);
     win32_start_service_ctrl_dispatcher($serviceName);
 
     try {
         win32_start_service_ctrl_dispatcher($serviceName);
     } catch (Throwable $e) {
         if ($flog) {
-            fwrite($flog, sprintf("%s: (%d) %s in %s on line %d\n", get_class($e), $e->getCode(), $e->getMessage(),
-                $e->getFile(),
-                $e->getLine()));
+            fwrite($flog, sprintf("%s: (%d) %s\n", get_class($e), $e->getCode(), $e->getMessage()));
         }
     }
+
+    try {
+        win32_set_service_pause_resume_state(true);
+    } catch (Throwable $e) {
+        if ($flog) {
+            fwrite($flog, sprintf("%s: (%d) %s\n", get_class($e), $e->getCode(), $e->getMessage()));
+        }
+    }
+
 
     $paused = false;
 

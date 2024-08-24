@@ -2,7 +2,7 @@
   +----------------------------------------------------------------------+
   | PHP Version 8                                                        |
   +----------------------------------------------------------------------+
-  | Copyright (c) 1997-2020 The PHP Group                                |
+  | Copyright (c) 1997-2024 The PHP Group                                |
   +----------------------------------------------------------------------+
   | This source file is subject to version 3.0 of the PHP license,       |
   | that is bundled with this package in the file LICENSE, and is        |
@@ -29,7 +29,7 @@ zend_class_entry *Win32ServiceException_ce_ptr;
 
 #define phpext_win32service_ptr    &win32service_module_entry
 
-#define PHP_WIN32SERVICE_VERSION "1.1.0-dev"
+#define PHP_WIN32SERVICE_VERSION "1.1.0-alpha1"
 
 #ifndef PHP_WIN32
 # error This extension is for win32 only
