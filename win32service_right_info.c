@@ -12,7 +12,7 @@
   | obtain it through the world-wide-web, please send a note to          |
   | license@php.net so we can mail you a copy immediately.               |
   +----------------------------------------------------------------------+
-  | Author: Jean-Baptiste Nahan <jbnahan@php.net>                    |
+  | Author: Jean-Baptiste Nahan <jbnahan@php.net>                        |
   +----------------------------------------------------------------------+
 */
 
@@ -24,6 +24,7 @@
 #include "zend_exceptions.h"
 #include "php_ini.h"
 #include "php_win32service.h"
+#include "win32service_right_info_arginfo.h"
 #include <aclapi.h>
 
 zend_class_entry *win32service_right_info_class_entry;
@@ -344,68 +345,33 @@ void win32service_right_info_free(zend_object *object) {
 //    printf("free structure ok \n");
 }
 
-/* win32service_right_info_class ARG_INFO definition */
-ZEND_BEGIN_ARG_INFO_EX(arginfo_win32service_right_info_class__construct, ZEND_SEND_BY_VAL, ZEND_RETURN_VALUE, 0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class__toString, ZEND_SEND_BY_VAL, 0, IS_STRING,
-                                        0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class__clone, ZEND_SEND_BY_VAL, 0, IS_VOID,
-                                        0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class__serialize, ZEND_SEND_BY_VAL, 0, IS_ARRAY,
-                                        0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class__unserialize, ZEND_SEND_BY_VAL, 1, IS_VOID,
-                                        0)
-    ZEND_ARG_TYPE_INFO(0, data, IS_ARRAY, 0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class_getFullUsername, ZEND_SEND_BY_VAL, 0,
-                                        IS_STRING, 0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class_getRights, ZEND_SEND_BY_VAL, 0, IS_ARRAY,
-                                        0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class_isGrantAccess, ZEND_SEND_BY_VAL, 0,
-                                        IS_LONG, 0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class_isDenyAccess, ZEND_SEND_BY_VAL, 0,
-                                        IS_LONG, 0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class_getUsername, ZEND_SEND_BY_VAL, 0,
-                                        IS_STRING, 0)
-ZEND_END_ARG_INFO()
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_win32service_right_info_class_getDomain, ZEND_SEND_BY_VAL, 0, IS_STRING,
-                                        0)
-ZEND_END_ARG_INFO()
 
 zend_function_entry win32service_right_info_class_functions[] = {
         PHP_ME
-        (win32service_right_info_class, __construct, arginfo_win32service_right_info_class__construct, ZEND_ACC_PRIVATE)
+        (win32service_right_info_class, __construct, arginfo_class_Win32Service_RightInfo___construct, ZEND_ACC_PRIVATE)
         PHP_ME
-        (win32service_right_info_class, __toString, arginfo_win32service_right_info_class__toString, ZEND_ACC_PUBLIC)
+        (win32service_right_info_class, __toString, arginfo_class_Win32Service_RightInfo___toString, ZEND_ACC_PUBLIC)
         PHP_ME
-        (win32service_right_info_class, __clone, arginfo_win32service_right_info_class__clone, ZEND_ACC_PUBLIC)
+        (win32service_right_info_class, __clone, arginfo_class_Win32Service_RightInfo___clone, ZEND_ACC_PUBLIC)
         PHP_ME
-        (win32service_right_info_class, __serialize, arginfo_win32service_right_info_class__serialize, ZEND_ACC_PUBLIC)
+        (win32service_right_info_class, __serialize, arginfo_class_Win32Service_RightInfo___serialize, ZEND_ACC_PUBLIC)
         PHP_ME
-        (win32service_right_info_class, __unserialize, arginfo_win32service_right_info_class__unserialize, ZEND_ACC_PUBLIC)
-        PHP_ME(win32service_right_info_class, getFullUsername, arginfo_win32service_right_info_class_getFullUsername,
+        (win32service_right_info_class, __unserialize, arginfo_class_Win32Service_RightInfo___unserialize, ZEND_ACC_PUBLIC)
+        PHP_ME(win32service_right_info_class, getFullUsername, arginfo_class_Win32Service_RightInfo_getUsername,
                ZEND_ACC_PUBLIC)
         PHP_ME
-        (win32service_right_info_class, getRights, arginfo_win32service_right_info_class_getRights, ZEND_ACC_PUBLIC)
-        PHP_ME(win32service_right_info_class, isGrantAccess, arginfo_win32service_right_info_class_isGrantAccess,
+        (win32service_right_info_class, getRights, arginfo_class_Win32Service_RightInfo___serialize, ZEND_ACC_PUBLIC)
+        PHP_ME(win32service_right_info_class, isGrantAccess, arginfo_class_Win32Service_RightInfo_isGrantAccess,
                ZEND_ACC_PUBLIC)
-        PHP_ME(win32service_right_info_class, isDenyAccess, arginfo_win32service_right_info_class_isDenyAccess,
+        PHP_ME(win32service_right_info_class, isDenyAccess, arginfo_class_Win32Service_RightInfo_isGrantAccess,
                ZEND_ACC_PUBLIC)
         PHP_ME
-        (win32service_right_info_class, getUsername, arginfo_win32service_right_info_class_getUsername, ZEND_ACC_PUBLIC)
+        (win32service_right_info_class, getUsername, arginfo_class_Win32Service_RightInfo_getUsername, ZEND_ACC_PUBLIC)
         PHP_ME
-        (win32service_right_info_class, getDomain, arginfo_win32service_right_info_class_getDomain, ZEND_ACC_PUBLIC)
+        (win32service_right_info_class, getDomain, arginfo_class_Win32Service_RightInfo_getUsername, ZEND_ACC_PUBLIC)
 
         {NULL, NULL, NULL}
 };
-
 
 PHP_MINIT_FUNCTION (win32service_right_info) {
     zend_class_entry ce;
