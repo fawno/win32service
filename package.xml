@@ -22,10 +22,10 @@
         <email>jbnahan@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2024-08-24</date>
+    <date>2024-09-16</date>
     <time>21:30:00</time>
     <version>
-        <release>1.1.0-beta1</release>
+        <release>1.1.0beta1</release>
         <api>0.5.0</api>
     </version>
     <stability>
@@ -44,6 +44,7 @@
     * Add function win32_get_service_env_vars()
     * Add function win32_set_service_pause_resume_state()
     * Some function are now disabled if PHP not run in Windows service context. See PHP Information.
+    * Use the `gen_stub.php` to generate arginfo header.
 
      The binary is also available here: https://github.com/win32service/win32service/releases/tag/v1.1.0-beta1
  ]]></notes>
@@ -86,7 +87,7 @@
     <changelog>
         <release>
             <version>
-                <release>1.1.0-beta1</release>
+                <release>1.1.0beta1</release>
                 <api>0.5.0</api>
             </version>
             <stability>
@@ -105,6 +106,7 @@
     * Add function win32_get_service_env_vars()
     * Add function win32_set_service_pause_resume_state()
     * Some function are now disabled if PHP not run in Windows service context. See PHP Information.
+    * Use the `gen_stub.php` to generate arginfo header.
  ]]></notes>
         </release>
         <release>

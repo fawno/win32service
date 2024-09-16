@@ -10,6 +10,7 @@
 * Add function win32_remove_service_env_var() (@macintoshplus) (issue [#80](https://github.com/win32service/win32service/issues/80))
 * Add function win32_get_service_env_vars() (@macintoshplus) (issue [#80](https://github.com/win32service/win32service/issues/80))
 * Some function are now disabled if PHP not run in Windows service context. See PHP Information.
+* Use the `gen_stub.php` to generate arginfo header. (issue [#84](https://github.com/win32service/win32service/issues/84))
 
 
 # Version 1.0.2 (2022-10-13)
