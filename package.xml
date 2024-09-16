@@ -25,7 +25,7 @@
     <date>2024-09-16</date>
     <time>21:30:00</time>
     <version>
-        <release>1.1.0beta1</release>
+        <release>1.1.0beta2</release>
         <api>0.5.0</api>
     </version>
     <stability>
@@ -56,9 +56,11 @@
             <file name="config.w32" role="src"/>
             <file name="php_win32service.h" role="src"/>
             <file name="php_win32service_int.h" role="src"/>
+            <file name="php_win32service_arginfo.h" role="src"/>
             <file name="win32service.c" role="src"/>
             <file name="win32service_right.h" role="src"/>
             <file name="win32service_right.c" role="src"/>
+            <file name="win32service_right_info_arginfo.h" role="src"/>
             <file name="win32service_right_info.h" role="src"/>
             <file name="win32service_right_info.c" role="src"/>
             <file name="win32service_registry.h" role="src"/>
@@ -85,6 +87,30 @@
     <providesextension>win32service</providesextension>
     <extsrcrelease/>
     <changelog>
+        <release>
+            <version>
+                <release>1.1.0beta2</release>
+                <api>0.5.0</api>
+            </version>
+            <stability>
+                <release>beta</release>
+                <api>beta</api>
+            </stability>
+            <license uri="http://www.php.net/license">PHP License</license>
+            <notes><![CDATA[
+    * Add object \Win32Service\RightInfo
+    * Add function win32_read_right_access_service()
+    * Add function win32_read_all_rights_access_service()
+    * Add function win32_add_right_access_service()
+    * Add function win32_remove_right_access_service()
+    * Add function win32_add_service_env_var()
+    * Add function win32_remove_service_env_var()
+    * Add function win32_get_service_env_vars()
+    * Add function win32_set_service_pause_resume_state()
+    * Some function are now disabled if PHP not run in Windows service context. See PHP Information.
+    * Use the `gen_stub.php` to generate arginfo header.
+ ]]></notes>
+        </release>
         <release>
             <version>
                 <release>1.1.0beta1</release>
