@@ -25,7 +25,7 @@
     <date>2024-09-16</date>
     <time>21:30:00</time>
     <version>
-        <release>1.1.0beta2</release>
+        <release>1.1.0beta3</release>
         <api>0.5.0</api>
     </version>
     <stability>
@@ -34,19 +34,9 @@
     </stability>
     <license uri="http://www.php.net/license">PHP License</license>
     <notes><![CDATA[
-    * Add object \Win32Service\RightInfo
-    * Add function win32_read_right_access_service()
-    * Add function win32_read_all_rights_access_service()
-    * Add function win32_add_right_access_service()
-    * Add function win32_remove_right_access_service()
-    * Add function win32_add_service_env_var()
-    * Add function win32_remove_service_env_var()
-    * Add function win32_get_service_env_vars()
-    * Add function win32_set_service_pause_resume_state()
-    * Some function are now disabled if PHP not run in Windows service context. See PHP Information.
-    * Use the `gen_stub.php` to generate arginfo header.
+    * Fix memory leak on Win32Service\RightInfo username and domain.
 
-     The binary is also available here: https://github.com/win32service/win32service/releases/tag/v1.1.0-beta1
+     The binary is also available here: https://github.com/win32service/win32service/releases/tag/v1.1.0-beta3
  ]]></notes>
     <contents>
         <dir name="/">
@@ -87,6 +77,20 @@
     <providesextension>win32service</providesextension>
     <extsrcrelease/>
     <changelog>
+        <release>
+            <version>
+                <release>1.1.0beta3</release>
+                <api>0.5.0</api>
+            </version>
+            <stability>
+                <release>beta</release>
+                <api>beta</api>
+            </stability>
+            <license uri="http://www.php.net/license">PHP License</license>
+            <notes><![CDATA[
+    * Fix memory leak on Win32Service\RightInfo username and domain.
+ ]]></notes>
+        </release>
         <release>
             <version>
                 <release>1.1.0beta2</release>
