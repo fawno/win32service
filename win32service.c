@@ -530,8 +530,8 @@ static PHP_FUNCTION(win32_read_right_access_service) {
                                    GRANT_ACCESS);
     if (pSD != NULL)
         LocalFree((HLOCAL) pSD);
-    efree(explDomain);
-    efree(explUsername);
+    //efree(explDomain);
+    //efree(explUsername);
 }
 /* }}} */
 
