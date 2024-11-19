@@ -1,0 +1,14 @@
+{
+	"name": "win32service/win32service",
+	"type": "php-ext",
+	"description": "The win32service extension is a Windows-specific extension that allows PHP to communicate with the Service Control Manager to start, stop, register and unregister the services, and even allows your PHP scripts to run as a service.",
+	"keywords": ["windows", "service", "service-manager"],
+	"homepage": "https://win32service.mactronique.fr/",
+	"licence": "PHP Licence v3.01",
+	"require": {
+		"php": ">=8.0"
+	},
+	"php-ext": {
+		"extension-name": "win32service"
+	}
+}
