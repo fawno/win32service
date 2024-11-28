@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-rel: ['8.0', '8.1', '8.2', '8.3']
+        php-rel: ['8.0', '8.1', '8.2', '8.3', '8.4']
         platform: [x64, x86]
         ts: [ts, nts]
     steps:
@@ -36,7 +36,7 @@ jobs:
           echo $extension_version
       - name: Setup PHP
         id: setup-php
-        uses: php/setup-php-sdk@v0.8
+        uses: php/setup-php-sdk@v0.10
         with:
           version: ${{matrix.php-rel}}
           arch: ${{matrix.platform}}
